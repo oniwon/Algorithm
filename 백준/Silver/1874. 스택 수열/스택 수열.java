@@ -1,38 +1,35 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Stack;
+import java.io.*;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        int n = Integer.parseInt(br.readLine());
+        int n = Integer.parseInt(br.readLine()); // 입력 개수
+        StringBuilder sb = new StringBuilder();
 
         int[] arr = new int[n];
-        for(int i = 0; i < arr.length; i++) {
+        for(int i = 0; i < n; i++) { // 입력된 숫자 배열에 넣기
             arr[i] = Integer.parseInt(br.readLine());
         }
 
         Stack<Integer> stack = new Stack<>();
-        StringBuilder result = new StringBuilder();
         int num = 1;
 
-        for(int i = 0; i < arr.length; i++) {
-            while(num <= arr[i]) {
-                    stack.push(num);
-                    result.append("+\n");
-                    num++;
+        for(int j = 0; j < n; j++) {
+            while (num <= arr[j]) { // 1부터 arr[0] 보다 작거나 같은 수까지 스택에 넣기
+                stack.push(num);
+                sb.append("+\n");
+                num++;
             }
 
-            if(stack.peek() == arr[i]) {
+            if (stack.peek() == arr[j]) { // 배열과 같은 숫자 스택에서 꺼내기
                 stack.pop();
-                result.append("-\n");
+                sb.append("-\n");
             } else {
                 System.out.println("NO");
                 return;
             }
         }
-        System.out.println(result);
+        System.out.println(sb);
     }
-} 
+}
