@@ -21,7 +21,7 @@ public class Main {
                 operatorStack.pop(); // '('를 스택에서 제거
             } else { // 연산자일 경우
                 while (!operatorStack.isEmpty() && precedence(operatorStack.peek()) >= precedence(ch)) {
-                    sb.append(operatorStack.pop()); // 우선 순위가 낮은 연산자 제거
+                    sb.append(operatorStack.pop()); // 우선 순위가 높은 연산자 제거
                 }
                 operatorStack.push(ch); // 현재 연산자를 스택에 추가
             }
