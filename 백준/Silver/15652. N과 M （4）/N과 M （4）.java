@@ -1,37 +1,39 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
 
     public static int n;
-    public static int m; // 깊이
-    public static int[] arr; // 출력 담을 배열
+    public static int m;
+    public static int[] arr;
     public static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
-       BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-       StringTokenizer st = new StringTokenizer(br.readLine());
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
 
-       n = Integer.parseInt(st.nextToken());
-       m = Integer.parseInt(st.nextToken());
+        arr = new int[m];
 
-       arr = new int[m];
-
-       dfs(0, 0);
-       System.out.println(sb);
+        dfs(0, 0);
+        System.out.println(sb);
     }
 
-    private static void dfs(int s, int d) {
-        if(d == m) {    // 깊이 같을 때 출력
+    public static void dfs(int d, int s) {
+        if(d == m) { // 재귀 탈출 조건
             for(int i : arr) {
                 sb.append(i).append(" ");
-            } sb.append("\n");
+            }
+            sb.append("\n");
             return;
         }
 
         for(int i = s; i < n; i++) {
             arr[d] = i + 1;
-            dfs(i, d + 1); // arr 에 s 부터 담기
+            dfs(d + 1, i); // 중복 가능, 오름차순
         }
     }
 }
