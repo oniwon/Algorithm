@@ -1,25 +1,26 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.StringTokenizer;
+import java.util.List;
 
 public class Main {
 
-    private static int[][] arr;
-    private static boolean[][] visited;
-    private static ArrayList<Integer> countList; // 단지별 개수 담을 배열
-    private static int n ,count;
+    static int[][] arr;
+    static int n;
+    static int[] dc = {-1, 0, 1, 0};
+    static int[] dr = {0, 1, 0, -1};
+    static boolean[][] visited;
+    static List<Integer> answer;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
         n = Integer.parseInt(br.readLine());
 
         arr = new int[n][n];
         visited = new boolean[n][n];
-        countList = new ArrayList<>();
-
-        count = 1; // 현재 집 위치 개수
+        answer = new ArrayList<>();
 
         for (int i = 0; i < n; i++) {
             String str = br.readLine();
@@ -28,38 +29,33 @@ public class Main {
             }
         }
 
-        for (int x = 0; x < n; x++) {
-            for (int y = 0; y < n; y++) {
-                if(arr[x][y] == 1 && !visited[x][y]) {
-                    dfs(x, y);
-                    countList.add(count);
-                    count = 1; // 단지별 집 개수 다시 1로 초기화
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (arr[i][j] == 1 && !visited[i][j]) {
+                    int count = dfs(i, j);
+                    answer.add(count);
                 }
             }
         }
-
-        Collections.sort(countList);
-        System.out.println(countList.size());
-        for(int i : countList) {
-            System.out.println(i);
-        }
-
+        System.out.println(answer.size()); // 단지 수
+        Collections.sort(answer);
+        for(int i : answer) System.out.println(i); // 각 단지 수 출력(오름차순)
     }
 
-    private static void dfs(int x, int y) {
-        int[] dr = {-1, 0, 1, 0};
-        int[] dc = {0, 1, 0, -1};
-
+    public static int dfs(int x, int y) {
         visited[x][y] = true;
+        int count = 1;
 
-        for (int d = 0; d < 4; d++) {
-            int nr = x + dr[d];
-            int nc = y + dc[d];
+        for (int i = 0; i < 4; i++) {
+            int nc = x + dc[i];
+            int nr = y + dr[i];
 
-            if (nr >= 0 && nr < n && nc >= 0 && nc < n && arr[nr][nc] == 1 && !visited[nr][nc]) {
-                count++;
-                dfs(nr, nc);
+            if (nc >= 0 && nc < n && nr >= 0 && nr < n) {
+                if (arr[nc][nr] == 1 && !visited[nc][nr]) {
+                    count += dfs(nc, nr);
+                }
             }
         }
+        return count;
     }
 }
