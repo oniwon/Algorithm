@@ -1,70 +1,77 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
-    private static List<List<Integer>> list; // 인접 리스트에 그래프 담기
-    private static boolean[] visited;  // 방문 노드 체크할 배열
+    static int n;
+    static int m;
+    static int v;
+    static  List<List<Integer>> list; // 인접 리스트
+    static boolean[] visited;
+    static StringBuilder sb;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 
-        int n = Integer.parseInt(st.nextToken()); // 정점 개수
-        int m = Integer.parseInt(st.nextToken()); // 간선 개수
-        int v = Integer.parseInt(st.nextToken()); // 탐색 시작 번호
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        v = Integer.parseInt(st.nextToken());
 
         list = new ArrayList<>();
+        visited = new boolean[n + 1];
+        sb = new StringBuilder();
 
-        for(int i = 0; i <= n; i++) { // 1부터 정점 개수만큼 list 초기화
+        for(int i = 0; i <= n; i++) {
             list.add(new ArrayList<>());
         }
 
-        visited = new boolean[n + 1];
-
-        for(int i = 0; i < m; i++) { // list 에 값 담기
-            StringTokenizer st2 = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st2.nextToken());
-            int b = Integer.parseInt(st2.nextToken());
+        for(int i = 0; i < m; i++){
+            st = new StringTokenizer(br.readLine(), " ");
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
             list.get(a).add(b);
             list.get(b).add(a);
         }
 
-
         for(int i = 0; i <= n; i++) {
-            Collections.sort(list.get(i)); // 정점 번호가 작은 것을 먼저 방문=> 인접 리스트 정렬
+            Collections.sort(list.get(i)); // 정점 번호가 작은 것 먼저 방문
         }
 
         dfs(v);
-        System.out.println();
+        sb.append("\n");
 
-        visited = new boolean[n + 1]; // 방문 배열 초기화
+        Arrays.fill(visited, false);
 
         bfs(v);
+        System.out.println(sb);
     }
 
-
-    private static void dfs(int node) {
+    public static void dfs(int node) {
         visited[node] = true;
-        System.out.print(node + " ");
-
-        for(int i : list.get(node)) {
-            if(!visited[i]) dfs(i);
+        sb.append(node).append(" ");
+        for(int num : list.get(node)) {
+            if(!visited[num]) {
+                dfs(num);
+            }
         }
     }
 
-    private static void bfs(int node) {
+    public static void bfs(int node) {
         Queue<Integer> queue = new LinkedList<>();
         queue.add(node);
         visited[node] = true;
+        sb.append(node).append(" ");  // 시작 노드 추가
 
         while (!queue.isEmpty()) {
             int front = queue.poll();
-            System.out.print(front + " ");
 
             for (int i : list.get(front)) {
                 if (!visited[i]) {
                     queue.add(i);
                     visited[i] = true;
+                    sb.append(i).append(" ");
                 }
             }
         }
