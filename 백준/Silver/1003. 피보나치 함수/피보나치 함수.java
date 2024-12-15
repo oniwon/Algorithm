@@ -1,26 +1,32 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main {
-    private static int[][] dp;
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
         int t = Integer.parseInt(br.readLine());
 
-        dp = new int[41][2];
-        dp[0][0] = 1;
-        dp[0][1] = 0;
-        dp[1][0] = 0;
-        dp[1][1] = 1;
+        // 0과 1 호출 횟수 저장
+        int[] countZero = new int[41];
+        int[] countOne = new int[41];
+
+        countZero[0] = 1;
+        countOne[0] = 0;
+        countZero[1] = 0;
+        countOne[1] = 1;
 
         for (int i = 2; i <= 40; i++) {
-            dp[i][0] = dp[i - 1][0] + dp[i - 2][0];
-            dp[i][1] = dp[i - 1][1] + dp[i - 2][1];
+            countZero[i] = countZero[i - 1] + countZero[i - 2];
+            countOne[i] = countOne[i - 1] + countOne[i - 2];
         }
 
-        for (int i = 0; i < t; i++) {
+        while (t-- > 0) {
             int n = Integer.parseInt(br.readLine());
-            System.out.println(dp[n][0] + " " + dp[n][1]);
+            sb.append(countZero[n]).append(" ").append(countOne[n]).append("\n");
         }
+
+        System.out.print(sb);
     }
 }
