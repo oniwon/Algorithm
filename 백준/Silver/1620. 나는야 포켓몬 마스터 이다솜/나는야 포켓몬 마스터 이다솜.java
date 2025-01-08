@@ -1,32 +1,35 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.StringTokenizer;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
         int n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
 
-        // 시간복잡도를 고려해 맵 두개 만들기
-        Map<Integer, String> map = new HashMap<>();
-        Map<String, Integer> reverseMap = new HashMap<>();
-
-        for(int i = 1; i <= n; i++) {
-            String s = br.readLine();
-            map.put(i, s);
-            reverseMap.put(s, i);
+        HashMap<String, String> map1 = new HashMap<>(); // 번호, 포켓몬 이름
+        HashMap<String, String> map2 = new HashMap<>(); // 포켓몬 이름, 번호
+        for (int i = 1; i <= n; i++) {
+            String name = br.readLine();
+            map1.put(String.valueOf(i), name);
+            map2.put(name, String.valueOf(i));
         }
 
-        for(int i = 0; i < m; i++) {
-            String s = br.readLine();
-            if(49 <= s.charAt(0) && s.charAt(0) <= 57) { // 숫자에 해당하면 문자 출력
-                int j = Integer.parseInt(s);
-                System.out.println(map.get(j));
-            } else {
-                System.out.println(reverseMap.get(s)); // 문자이면 숫자 출력
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < m; i++){
+            String str = br.readLine();
+            if(map1.containsKey(str)) {
+                sb.append(map1.get(str)).append("\n");
+            } else if(map2.containsKey(str)) {
+                sb.append(map2.get(str)).append("\n");
             }
         }
+
+        System.out.println(sb);
     }
 }
